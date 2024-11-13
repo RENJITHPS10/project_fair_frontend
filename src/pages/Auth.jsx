@@ -2,14 +2,16 @@ import { faStackOverflow } from '@fortawesome/free-brands-svg-icons'
 import { faBackward } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginApi, registerApi } from '../services/allApi'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { loginResponseContext } from '../context/Contextshare'
 
 function Auth({ register }) {
+  const { setLoginResponse } = useContext(loginResponseContext)
   const navigate = useNavigate()
   const [userDetails, setUserDetails] = useState({
     username: '',
@@ -53,25 +55,25 @@ function Auth({ register }) {
       const result = await loginApi(userDetails)
       console.log(result)
 
-      if(result.status==200){
-
+      if (result.status == 200) {
+        setLoginResponse(true)
         toast.success("login successfull")
 
-        sessionStorage.setItem("existingUser",JSON.stringify(result.data.existingUser))
-        sessionStorage.setItem("token",result.data.token)
-       
+        sessionStorage.setItem("existingUser", JSON.stringify(result.data.existingUser))
+        sessionStorage.setItem("token", result.data.token)
+
         setUserDetails({
           username: '',
           email: '',
           password: ''
         })
-        
-        setTimeout(()=>{
+
+        setTimeout(() => {
           navigate('/')
-        },2000)
-      }else if(result.status==406){
+        }, 2000)
+      } else if (result.status == 406) {
         toast.warning(result.response.data)
-      }else{
+      } else {
         toast.error("something went wrong")
       }
 

@@ -6,12 +6,13 @@ import Addproject from './Addproject'
 import Edit from './Edit'
 import { deleteuserprojectApi, getuserprojectsApi } from '../services/allApi'
 import { Link } from 'react-router-dom'
-import { addResponseContext } from '../context/Contextshare'
+import { addResponseContext, editResponseContext } from '../context/Contextshare'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 function Myprojects() {
+  const {editResponse}=useContext(editResponseContext)
   const [userprojects, setUserProjects] = useState([])
   const [deletestatus,setdeletestatus]=useState({})
   const { addResponse } = useContext(addResponseContext)
@@ -49,10 +50,10 @@ function Myprojects() {
 
 
   }
-console.log(addResponse)
+
   useEffect(() => {
     getuserprojects()
-  }, [addResponse,deletestatus])
+  }, [addResponse,deletestatus,editResponse])
 
   return (
     <>
